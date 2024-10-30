@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tela de Boas-Vindas</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="welcome-container container">
+        <h1>Bem-vindo ao App Store do Minecraft!</h1>
+        <p>Por favor, insira seu nome de usuário:</p>
+        <input type="text" id="usernameInput" placeholder="Seu nome de usuário" />
+        <button id="continueButton">Continuar</button>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.0.0/firebase-app.js';
+        import { getFirestore } from 'https://www.gstatic.com/firebasejs/9.0.0/firebase-firestore.js';
+
+        // Configuração do Firebase
+        const firebaseConfig = {
+            apiKey: "AIzaSyDMv75sz_Kq3xjAOfn_ViFbc4RE2-JoQfo",
+            authDomain: "web-mine-app-store.firebaseapp.com",
+            projectId: "web-mine-app-store",
+            storageBucket: "web-mine-app-store.appspot.com",
+            messagingSenderId: "166292759038",
+            appId: "1:166292759038:web:4dffd61cd3fe1cdcc1a0af",
+            measurementId: "G-DWEQPHZ2R6"
+        };
+
+        // Inicializa o Firebase
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        // Verifica se já existe um nome de usuário salvo
+        window.onload = () => {
+            const storedUsername = localStorage.getItem('username');
+            if (storedUsername) {
+                window.location.href = 'user.html';
+            }
+        };
+
+        // Adiciona evento de clique ao botão continuar
+        document.getElementById('continueButton').addEventListener('click', () => {
+            const username = document.getElementById('usernameInput').value.trim();
+            if (username) {
+                localStorage.setItem('username', username);
+                window.location.href = 'user.html';
+            } else {
+                alert("Por favor, insira um nome de usuário válido.");
+            }
+        });
+    </script>
+</body>
+</html>

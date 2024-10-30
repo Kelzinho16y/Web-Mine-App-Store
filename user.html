@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Usuário - Lista de APKs</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <button id="logoutButton" onclick="logout()">Sair</button>
+        <h1>Lista de APKs</h1>
+
+        <h2 id="greetingMessage"></h2> 
+        
+        <ul class="version-list" id="versionList"></ul>
+
+        <div class="chat-container">
+            <h2>Chat</h2>
+            <div id="chatMessages"></div>
+            <input type="text" id="chatInput" placeholder="Digite sua mensagem" />
+            <button id="sendMessageButton">Enviar</button>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.0.0/firebase-app.js';
+        import { getFirestore, collection, addDoc, getDocs, orderBy, query } from 'https://www.gstatic.com/firebasejs/9.0.0/firebase-firestore.js';
+
+        // Configuração do Firebase
+        const firebaseConfig = {
+            apiKey: "AIzaSyDMv75sz_Kq3xjAOfn_ViFbc4RE2-JoQfo",
+            authDomain: "web-mine-app-store.firebaseapp.com",
+            projectId: "web-mine-app-store",
+            storageBucket: "web-mine-app-store.appspot.com",
+            messagingSenderId: "166292759038",
+            appId: "1:166292759038:web:4dffd61cd3fe1cdcc1a0af",
+            measurementId: "G-DWEQPHZ2R6"
+        };
+
+        // Inicializa o Firebase
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        // Carrega o nome de usuário armazenado
+        const storedUsername = localStorage.getItem('username');
+        document.getElementById('greetingMessage').textContent = `Olá, ${storedUsername}!`;
+
+        // Função para carregar versões dos APKs
+        async function loadVersions() {
+            const versionList = document.getElementById('versionList');
+            versionList.innerHTML = '';
+
+            try {
+                const snapshot = await getDocs(query(collection(db, 'versions'), orderBy('version')));
+                snapshot.forEach(doc => {
+                    const data = doc.data();
+                    const listItem = document.createElement('li');
+                    listItem.className = 'version-item';
+                    listItem.innerHTML = `<strong>${data.version}</strong> - <a href="${data.downloadUrl}" target="_blank">Download</a>`;
+                    versionList.appendChild(listItem);
+                });
+            } catch (error) {
+                console.error("Erro ao carregar versões:", error);
+            }
+        }
+
+        // Função para enviar mensagens
+        async function sendMessage() {
+            const messageInput = document.getElementById('chatInput');
+            const messageText = messageInput.value.trim();
+
+            if (messageText) {
+                try {
+                    await addDoc(collection(db, 'chat'), {
+                        message: messageText,
+                        username: storedUsername,
+                        timestamp: new Date()
+                    });
+
+                    messageInput.value = '';
+                    loadChatMessages(); 
+                } catch (error) {
+                    console.error("Erro ao enviar mensagem:", error);
+                }
+            } else {
+                alert("Por favor, digite uma mensagem.");
+            }
+        }
+
+        // Função para carregar mensagens do chat
+        async function loadChatMessages() {
+            const chatMessagesDiv = document.getElementById('chatMessages');
+            chatMessagesDiv.innerHTML = '';
+
+            try {
+                const snapshot = await getDocs(query(collection(db, 'chat'), orderBy('timestamp')));
+                snapshot.forEach(doc => {
+                    const messageData = doc.data();
+                    const messageDiv = document.createElement('div');
+                    messageDiv.textContent = `${messageData.username}: ${messageData.message}`;
+                    chatMessagesDiv.appendChild(messageDiv);
+                });
+            } catch (error) {
+                console.error("Erro ao carregar mensagens do chat:", error);
+            }
+        }
+
+        // Função de logout
+        window.logout = function() {
+            localStorage.removeItem('username');
+            window.location.href = 'index.html';
+        };
+
+        // Adiciona evento de clique ao botão enviar mensagem
+        document.getElementById('sendMessageButton').addEventListener('click', sendMessage);
+
+        // Carrega versões e mensagens do chat ao iniciar
+        loadVersions();
+        loadChatMessages();
+    </script>
+</body>
+</html>

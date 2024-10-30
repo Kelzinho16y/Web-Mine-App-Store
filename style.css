@@ -1,0 +1,103 @@
+/* style.css */
+
+/* Estilo global */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 0;
+    color: #333;
+}
+
+.container {
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 20px;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Estilo para a tela de boas-vindas */
+.welcome-container {
+    text-align: center; /* Centraliza o texto */
+}
+
+.welcome-container h1 {
+    font-size: 24px;
+    margin-bottom: 10px;
+}
+
+.welcome-container p {
+    font-size: 16px;
+    margin-bottom: 20px;
+}
+
+#usernameInput {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-bottom: 10px;
+}
+
+#continueButton {
+    padding: 10px 20px;
+    background: #3498db;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+#continueButton:hover {
+    background: #2980b9;
+}
+
+/* Estilo para o chat e lista de versões */
+.chat-container {
+    border-top: 1px solid #ccc;
+    margin-top: 20px;
+    padding-top: 20px;
+}
+
+.chat-container h2 {
+    font-size: 20px;
+    margin-bottom: 10px;
+}
+
+.version-list {
+    list-style-type: none;
+    padding: 0;
+}
+
+.version-item {
+    margin: 10px 0;
+    padding: 10px;
+    background: #f9f9f9;
+    border-radius: 5px;
+}
+
+.version-item a {
+    text-decoration: none;
+    color: #3498db;
+}
+
+/* Estilo do botão de sair */
+#logoutButton {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    padding: 10px 15px;
+    background: #e74c3c;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+#logoutButton:hover {
+    background: #c0392b;
+}
